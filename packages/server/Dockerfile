@@ -7,6 +7,7 @@ COPY package.json ./
 COPY yarn.lock ./
 
 RUN yarn
+RUN yarn build
 
 COPY . .
 

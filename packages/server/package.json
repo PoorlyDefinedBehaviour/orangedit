@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "compose:dev": "sudo docker-compose -f docker-compose-dev.yml up",
-    "build": "tsc",
-    "start": "tsc && node build/main",
-    "start:watch": "yarn compose:dev && nodemon -e ts --exec \"yarn build && node build/main\""
+    "build": "node_modules/.bin/tsc",
+    "start": "node build/main",
+    "start:watch": "nodemon -e ts --exec \"yarn build && node build/main\""
   },
   "devDependencies": {
     "@types/node": "^13.13.0",
@@ -22,5 +22,8 @@
     "nodemon": "^2.0.3",
     "prettier": "^2.0.4",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "pg": "^8.0.2"
   }
 }

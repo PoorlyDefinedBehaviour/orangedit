@@ -4,14 +4,17 @@ services:
     restart: always
     image: postgres:alpine
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "root"
     volumes:
-      - ./reddit:/var/lib/reddit/data
+      - ./volumes/db/data:/var/lib/postgresql/data
+      - ./volumes/db/log:/var/log/postgresql
     ports:
       - "5432:5432"
+    restart: unless-stopped
   app:
-    build: .
+    build: 
+      context: .
     volumes:
       - ./:/usr/src/app
     ports:
@@ -20,4 +23,4 @@ services:
       - .:/usr/app
     depends_on:
       - db
-    command: yarn start:watch
+    command: yarn start
