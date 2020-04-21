@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    restart: always
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./reddit:/var/lib/reddit/data
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - db
+    command: yarn start:watch
