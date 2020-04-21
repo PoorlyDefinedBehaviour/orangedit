@@ -2,6 +2,9 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "globals": {
+    "jest": true
+  },
   "extends": [
     "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
