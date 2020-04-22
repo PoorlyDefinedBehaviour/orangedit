@@ -1,0 +1,22 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+        environment:
+          NODE_ENV: test
+          APP_KEY:23o0230fk32f23fo32jfo23fj
+          PORT:8080
+      - image: mysql
+
+    steps:
+      - checkout
+
+      - run: yarn 
+
+      # run tests!
+      - run: yarn test

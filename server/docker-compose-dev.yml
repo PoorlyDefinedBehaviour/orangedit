@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+    volumes:
+      - ./volumes/mysql:/var/lib/orangedit/data
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  app:
+    build: ./
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - redis
+    command: yarn dev
