@@ -3,15 +3,20 @@ services:
   db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
     volumes:
       - ./volumes/mysql:/var/lib/orangedit/data
     ports:
       - "3306:3306"
+
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+      
   app:
     build: ./
     volumes:
