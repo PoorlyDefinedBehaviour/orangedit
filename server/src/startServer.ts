@@ -26,9 +26,10 @@ const ormConfigs = {
   dev: {
     name: "dev",
     type: "mysql",
-    host: "localhost",
     port: 3306,
     database: "orangedit_dev",
+    user: "user",
+    password: "password",
     synchronize: true,
     logging: true,
     entities: ["src/entity/**/*.ts"],
@@ -43,9 +44,10 @@ const ormConfigs = {
   test: {
     name: "test",
     type: "mysql",
-    host: "localhost",
     port: 3306,
     database: "orangedit_test",
+    user: "user",
+    password: "password",
     synchronize: true,
     logging: false,
     entities: ["src/entity/**/*.ts"],
@@ -88,7 +90,7 @@ const startServer = async (): Promise<ServerStartResult> => {
 
   apolloServer.applyMiddleware({ app, cors: false })
 
-  const port = process.env.PORT || 8080
+  const port = env.PORT
   return { server: app.listen(port, () => {}), port }
 }
 
