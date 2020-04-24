@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "graphql": "^15.0.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/faker": "^4.1.11",
+    "@types/jest": "^25.2.1",
+    "faker": "^4.1.0"
+  }
+}
