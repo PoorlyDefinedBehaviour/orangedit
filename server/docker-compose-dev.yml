@@ -16,11 +16,9 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
-      
+
   app:
     build: ./
-    volumes:
-      - ./:/usr/src/app
     ports:
       - "8080:8080"
     volumes:
