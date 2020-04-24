@@ -11,54 +11,15 @@ import {
 } from "typeorm"
 import { ApolloServer } from "apollo-server-express"
 import { buildSchema } from "type-graphql"
-import loadResolvers from "./main/utils/LoadResolvers"
-import rateLimiter from "./main/config/ratelimiter"
-import session from "./main/config/session"
-import redis from "./main/config/redis"
-import env from "./main/config/env"
+import loadResolvers from "./Main/utils/LoadResolvers"
+import rateLimiter from "./Main/config/ratelimiter"
+import session from "./Main/config/session"
+import redis from "./Main/config/redis"
+import env from "./Main/config/env"
 
 interface ServerStartResult {
   server: Server
   port: number | string
-}
-
-const ormConfigs = {
-  dev: {
-    name: "dev",
-    type: "mysql",
-    port: 3306,
-    database: "orangedit_dev",
-    user: "user",
-    password: "password",
-    synchronize: true,
-    logging: true,
-    entities: ["src/entity/**/*.ts"],
-    migrations: ["src/migration/**/*.ts"],
-    subscribers: ["src/subscriber/**/*.ts"],
-    cli: {
-      entitiesDir: "src/entity",
-      migrationsDir: "src/migration",
-      subscribersDir: "src/subscriber",
-    },
-  },
-  test: {
-    name: "test",
-    type: "mysql",
-    port: 3306,
-    database: "orangedit_test",
-    user: "user",
-    password: "password",
-    synchronize: true,
-    logging: false,
-    entities: ["src/entity/**/*.ts"],
-    migrations: ["src/migration/**/*.ts"],
-    subscribers: ["src/subscriber/**/*.ts"],
-    cli: {
-      entitiesDir: "src/entity",
-      migrationsDir: "src/migration",
-      subscribersDir: "src/subscriber",
-    },
-  },
 }
 
 const startServer = async (): Promise<ServerStartResult> => {
