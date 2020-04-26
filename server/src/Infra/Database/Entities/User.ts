@@ -3,28 +3,32 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  AfterLoad,
-  BeforeUpdate,
-  BeforeInsert,
+  ManyToMany,
   Entity,
-  BaseEntity,
 } from "typeorm"
-import { Field, ObjectType, ID } from "type-graphql"
 
-@ObjectType("user")
+import ExtendedEntity from "./ExtendedEntity"
+import Role from "./Role"
+
 @Entity("users")
-export default class User extends BaseEntity {
-  @Field(() => ID)
+class User extends ExtendedEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Field(() => String)
+  @Column()
+  first_name!: string
+
+  @Column()
+  last_name!: string
+
   @Column({ unique: true })
   email!: string
 
-  @Field(() => String)
-  @Column({})
-  username!: string
+  @Column()
+  phone!: string
+
+  @Column()
+  receive_notifications!: boolean
 
   @Column()
   password!: string
@@ -32,38 +36,14 @@ export default class User extends BaseEntity {
   @Column({ nullable: true })
   temp_password: string
 
-  @Field(() => Date)
   @CreateDateColumn()
   created_at!: Date
 
-  @Field(() => Date)
   @UpdateDateColumn()
   updated_at!: Date
 
-  @AfterLoad()
-  // @ts-ignore
-  private loadTempPassword(): void {
-    this.temp_password = this.password
-  }
-
-  private hashPassword(password: string) {
-    const SALT_ROUNDS = 10
-    return hash(password, SALT_ROUNDS)
-  }
-
-  @BeforeInsert()
-  async hashPasswordBeforeInsert() {
-    this.password = await this.hashPassword(this.password)
-  }
-
-  @BeforeUpdate()
-  async hashPasswordBeforeUpdate() {
-    if (this.temp_password !== this.password) {
-      this.password = await this.hashPassword(this.password)
-    }
-  }
-
-  isCorrectPassword(password: string) {
-    return compare(password, this.password)
-  }
+  @ManyToMany(() => Role, (role: Role) => role.users)
+  roles: Role[]
 }
+
+export default User

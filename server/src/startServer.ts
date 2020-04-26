@@ -4,18 +4,14 @@ load()
 import { Server } from "http"
 import express from "express"
 import cors from "cors"
-import {
-  createConnection,
-  getConnectionOptions,
-  ConnectionOptions,
-} from "typeorm"
+import { createConnection, getConnectionOptions } from "typeorm"
 import { ApolloServer } from "apollo-server-express"
 import { buildSchema } from "type-graphql"
-import loadResolvers from "./Main/utils/LoadResolvers"
-import rateLimiter from "./Main/config/ratelimiter"
-import session from "./Main/config/session"
-import redis from "./Main/config/redis"
-import env from "./Main/config/env"
+import env from "./Config/env"
+import rateLimiter from "./Support/RateLimiter"
+import session from "express-session"
+import redis from "./Support/Redis"
+import loadResolvers from "./Utils/LoadResolvers"
 
 interface ServerStartResult {
   server: Server
@@ -23,7 +19,7 @@ interface ServerStartResult {
 }
 
 const startServer = async (): Promise<ServerStartResult> => {
-  const isProductionEnv = /prod/gi.test(process.env.NODE_ENV!)
+  const isProductionEnv = /prod/gi.test(env.NODE_ENV)
 
   const app = express()
   app.use(express.json())
@@ -31,17 +27,17 @@ const startServer = async (): Promise<ServerStartResult> => {
   app.use(rateLimiter)
   app.use(session)
 
-  // move ormConfigs to a file later
-  const connectionOptions = ormConfigs["dev"]
+  const connectionOptions = await getConnectionOptions(env.NODE_ENV)
 
-  await createConnection({
-    ...connectionOptions,
-    name: "default",
-  } as ConnectionOptions)
-
-  const schema = await buildSchema({
-    resolvers: loadResolvers(),
-  })
+  const [schema] = await Promise.all([
+    buildSchema({
+      resolvers: loadResolvers(),
+    }),
+    createConnection({
+      ...connectionOptions,
+      name: "default",
+    }),
+  ])
 
   const apolloServer = new ApolloServer({
     schema,
