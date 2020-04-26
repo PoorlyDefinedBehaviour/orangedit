@@ -1,0 +1,40 @@
+[
+  {
+    "dev": {
+      "name": "dev",
+      "type": "mysql",
+      "port": 3306,
+      "database": "orangedit_dev",
+      "user": "user",
+      "password": "password",
+      "synchronize": true,
+      "logging": true,
+      "entities": ["src/Infra/Database/Entities/**/*.ts"],
+      "migrations": ["src/Infra/Database/Migrations/**/*.ts"],
+      "subscribers": ["src/Infra/Database/Subscribers/**/*.ts"],
+      "cli": {
+        "entitiesDir": "src/Infra/Database/Entities",
+        "migrationsDir": "src/Infra/Database/Migrations",
+        "subscribersDir": "src/Infra/Database/Subscribers"
+      }
+    },
+    "test": {
+      "name": "test",
+      "type": "mysql",
+      "port": 3306,
+      "database": "orangedit_test",
+      "user": "user",
+      "password": "password",
+      "synchronize": true,
+      "logging": false,
+      "entities": ["src/Infra/Database/Entities/**/*.ts"],
+      "migrations": ["src/Infra/Database/Migrations/**/*.ts"],
+      "subscribers": ["src/Infra/Database/Subscribers/**/*.ts"],
+      "cli": {
+        "entitiesDir": "src/Infra/Database/Entities",
+        "migrationsDir": "src/Infra/Database/Migrations",
+        "subscribersDir": "src/Infra/Database/Subscribers"
+      }
+    }
+  }
+]

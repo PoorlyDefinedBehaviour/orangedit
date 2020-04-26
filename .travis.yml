@@ -1,0 +1,22 @@
+dist: trusty
+language: node_js
+node_js:
+  - "12"
+env:
+  global:
+    - NODE_ENV=test
+    - APP_KEY=fo93kf23f0kf23fo03f
+    - PORT=8080
+jobs:
+  fast_finish: true
+
+services:
+  - mysql
+  - redis-server
+
+install:
+  - cd server
+  - yarn
+
+script:
+  - "yarn test"
