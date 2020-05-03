@@ -3,9 +3,11 @@ import makeSignUpValidator, {
   isUsernameLongEnough,
   isUsernameNotTooLong,
   isEmailInuse,
-} from "./SignUpValidator"
+  isPasswordLongEnough,
+  isPasswordNotTooLong,
+} from "./SignUpUseCaseValidator"
 
-describe("SignUpValidator test suite", () => {
+describe("SignUpUseCaseValidator test suite", () => {
   test("isEmailValid@ rejects invalid email", async () => {
     const result = await isEmailValid({
       username: "johndoe",
@@ -113,6 +115,58 @@ describe("SignUpValidator test suite", () => {
       UserRepository,
       user,
     })
+
+    expect(result.value).toEqual(user)
+  })
+
+  test("isPasswordLongEnough@ returns Success(user) if password is longer than 5 characters", async () => {
+    const user = {
+      username: "dwqdqwwqdwqdqwdwq",
+      email: "valid_email@email.com",
+      password: "long_enough_password_password",
+    }
+    const result = await isPasswordLongEnough(user)
+
+    expect(result.value).toEqual(user)
+  })
+
+  test("isPasswordLongEnough@ returns Failure(...) if password is longer than 5 characters", async () => {
+    const user = {
+      username: "dwqdqwwqdwqdqwdwq",
+      email: "valid_email@email.com",
+      password: "a",
+    }
+    const result = await isPasswordLongEnough(user)
+
+    expect(result.value[0]).toEqual({
+      message: "Password must be at least 5 characters long",
+      constraint: "min",
+      field: "password",
+    })
+  })
+
+  test("isPasswordNotTooLong@ returns Failure(...) if password is longer than 255 characters", async () => {
+    const user = {
+      username: "dwqdqwwqdwqdqwdwq",
+      email: "valid_email@email.com",
+      password: "a".repeat(256),
+    }
+    const result = await isPasswordNotTooLong(user)
+
+    expect(result.value[0]).toEqual({
+      message: "Password must be less 255 characters long",
+      constraint: "max",
+      field: "password",
+    })
+  })
+
+  test("isPasswordNotTooLong@ returns Success(user) if password is less than 255 characters long", async () => {
+    const user = {
+      username: "dwqdqwwqdwqdqwdwq",
+      email: "valid_email@email.com",
+      password: "valid_password_123",
+    }
+    const result = await isPasswordNotTooLong(user)
 
     expect(result.value).toEqual(user)
   })
@@ -238,6 +292,74 @@ describe("SignUpValidator test suite", () => {
       email: "valid_email@email.com",
       username: "long_but_valid_username_123_abc",
       password: "123456",
+    }
+    const validator = makeSignUpValidator({
+      UserRepository: { findOne: _ => Promise.resolve(null) },
+    })
+
+    const result = await validator.validate(user)
+
+    expect(result.value).toEqual(user)
+  })
+
+  test("rejects password that are less than 5 characters long", async () => {
+    const user = {
+      email: "valid_email@email.com",
+      username: "long_but_valid_username_123_abc",
+      password: "a",
+    }
+    const validator = makeSignUpValidator({
+      UserRepository: { findOne: _ => Promise.resolve(null) },
+    })
+
+    const result = await validator.validate(user)
+
+    expect(result.value[0]).toEqual({
+      message: "Password must be at least 5 characters long",
+      constraint: "min",
+      field: "password",
+    })
+  })
+
+  test("accepts passwords that are longer than 5 characters", async () => {
+    const user = {
+      email: "valid_email@email.com",
+      username: "long_but_valid_username_123_abc",
+      password: "valid_password",
+    }
+    const validator = makeSignUpValidator({
+      UserRepository: { findOne: _ => Promise.resolve(null) },
+    })
+
+    const result = await validator.validate(user)
+
+    expect(result.value).toEqual(user)
+  })
+
+  test("rejects passwords that are longer than 255 characters", async () => {
+    const user = {
+      email: "valid_email@email.com",
+      username: "long_but_valid_username_123_abc",
+      password: "invalid_password".repeat(255),
+    }
+    const validator = makeSignUpValidator({
+      UserRepository: { findOne: _ => Promise.resolve(null) },
+    })
+
+    const result = await validator.validate(user)
+
+    expect(result.value[0]).toEqual({
+      message: "Password must be less 255 characters long",
+      constraint: "max",
+      field: "password",
+    })
+  })
+
+  test("accepts passwords that less than 255 characters long", async () => {
+    const user = {
+      email: "valid_email@email.com",
+      username: "long_but_valid_username_123_abc",
+      password: "valid_password",
     }
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },

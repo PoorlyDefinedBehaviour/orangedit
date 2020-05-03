@@ -1,4 +1,4 @@
-import makeSignUpValidator from "../Domain/UseCases/User/SignUp/SignUpValidator"
+import makeSignUpValidator from "../Domain/UseCases/User/SignUp/SignUpUseCaseValidator"
 import UserRepositoryComposer from "./UserRepositoryComposer"
 
 const UserRepository = UserRepositoryComposer.compose()

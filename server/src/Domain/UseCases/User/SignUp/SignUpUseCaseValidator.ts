@@ -58,6 +58,38 @@ export const isUsernameNotTooLong = (user: User) =>
           ])
     )
 
+export const isPasswordLongEnough = (user: User) =>
+  Yup.string()
+    .min(5)
+    .isValid(user.password)
+    .then(valid =>
+      valid
+        ? Success(user)
+        : Failure([
+            {
+              message: "Password must be at least 5 characters long",
+              constraint: "min",
+              field: "password",
+            },
+          ])
+    )
+
+export const isPasswordNotTooLong = (user: User) =>
+  Yup.string()
+    .max(255)
+    .isValid(user.password)
+    .then(valid =>
+      valid
+        ? Success(user)
+        : Failure([
+            {
+              message: "Password must be less 255 characters long",
+              constraint: "max",
+              field: "password",
+            },
+          ])
+    )
+
 export const isEmailInuse = ({
   UserRepository,
   user,
@@ -86,6 +118,8 @@ const makeSignUpValidator = ({ UserRepository }: IDependencies) => ({
       isEmailInuse({ UserRepository, user }),
       isUsernameLongEnough(user),
       isUsernameNotTooLong(user),
+      isPasswordLongEnough(user),
+      isPasswordNotTooLong(user),
     ]).then(results => collect(results)),
 })
 
