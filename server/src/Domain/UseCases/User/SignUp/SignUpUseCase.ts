@@ -1,13 +1,13 @@
 import User from "../../../Models/User"
-import S from "../../../../Config/Sanctuary"
+import Result from "folktale/result"
 
 interface IUserRepository {
   create: (data: User) => Promise<any>
   findOne: (query: object) => Promise<any>
 }
 
-interface IUserValidator {
-  validate: (data: User) => Promise<typeof S.Either>
+interface SignUpUseCaseValidator {
+  validate: (data: User) => Promise<any>
 }
 
 interface IEncrypter {
@@ -16,19 +16,25 @@ interface IEncrypter {
 
 interface IDependencies {
   UserRepository: IUserRepository
-  UserValidator: IUserValidator
+  SignUpUseCaseValidator: SignUpUseCaseValidator
   Encrypter: IEncrypter
 }
 
 const makeSignUpUseCase = ({
   UserRepository,
-  UserValidator,
+  SignUpUseCaseValidator,
   Encrypter,
 }: IDependencies) => ({
-  signUp: (data: User) =>
-    UserValidator.validate(data)
-      .then(S.chain((): Promise<string> => Encrypter.hash(data.password, 10)))
-      .then((password: string) => UserRepository.create({ ...data, password })),
+  execute: (data: User) =>
+    SignUpUseCaseValidator.validate(data).then(validationResult =>
+      validationResult.matchWith({
+        Failure: errors => Result.Error(errors.merge()),
+        Success: () =>
+          Encrypter.hash(data.password, 10)
+            .then(password => UserRepository.create({ ...data, password }))
+            .then(Result.Ok),
+      })
+    ),
 })
 
 export default makeSignUpUseCase
