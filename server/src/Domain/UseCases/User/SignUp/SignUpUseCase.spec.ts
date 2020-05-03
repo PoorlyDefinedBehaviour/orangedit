@@ -7,23 +7,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "johndoe",
       email: "invalid_email",
       password: "password",
     }
+
     const result = await signUpUseCase.execute(user)
 
     expect(result.value[0]).toEqual({
@@ -38,23 +43,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "a",
       email: "valid_email@email.com",
       password: "password",
     }
+
     const result = await signUpUseCase.execute(user)
 
     expect(result.value[0]).toEqual({
@@ -69,23 +79,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "a".repeat(300),
       email: "valid_email@email.com",
       password: "password",
     }
+
     const result = await signUpUseCase.execute(user)
 
     expect(result.value[0]).toEqual({
@@ -100,23 +115,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "valid_username",
       email: "valid_email@email.com",
       password: "a",
     }
+
     const result = await signUpUseCase.execute(user)
 
     expect(result.value[0]).toEqual({
@@ -131,23 +151,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "valid_username",
       email: "valid_email@email.com",
       password: "a".repeat(300),
     }
+
     const result = await signUpUseCase.execute(user)
 
     expect(result.value[0]).toEqual({
@@ -162,23 +187,28 @@ describe("SignUpUseCase test suite", () => {
       hash: (value: string, saltRounds: number) =>
         Promise.resolve(`${value}-${saltRounds}`),
     }
+
     const UserRepository = {
       findOne: () => Promise.resolve(null),
       create: data => Promise.resolve(data),
     }
+
     const SignUpUseCaseValidator = makeSignUpValidator({
       UserRepository,
     })
+
     const signUpUseCase = makeSignUpUseCase({
       Encrypter,
       SignUpUseCaseValidator,
       UserRepository,
     })
+
     const user = {
       username: "johndoe",
       email: "valid_email@email.com",
       password: "password",
     }
+
     const result = await signUpUseCase
       .execute(user)
       .then(result => result.merge())

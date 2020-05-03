@@ -26,6 +26,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "123456",
     }
+
     const result = await isEmailValid(user)
 
     expect(result.value).toEqual(user)
@@ -51,6 +52,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "123456",
     }
+
     const result = await isUsernameLongEnough(user)
 
     expect(result.value).toEqual(user)
@@ -62,6 +64,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "123456",
     }
+
     const result = await isUsernameNotTooLong(user)
 
     expect(result.value[0]).toEqual({
@@ -77,6 +80,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "123456",
     }
+
     const result = await isUsernameNotTooLong(user)
 
     expect(result.value).toEqual(user)
@@ -86,6 +90,7 @@ describe("SignUpUseCaseValidator test suite", () => {
     const UserRepository = {
       findOne: () => Promise.resolve(true),
     }
+
     const result = await isEmailInuse({
       UserRepository,
       user: {
@@ -106,11 +111,13 @@ describe("SignUpUseCaseValidator test suite", () => {
     const UserRepository = {
       findOne: () => Promise.resolve(false),
     }
+
     const user = {
       username: "abcde",
       email: "valid_email@email.com",
       password: "123456",
     }
+
     const result = await isEmailInuse({
       UserRepository,
       user,
@@ -125,6 +132,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "long_enough_password_password",
     }
+
     const result = await isPasswordLongEnough(user)
 
     expect(result.value).toEqual(user)
@@ -136,6 +144,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "a",
     }
+
     const result = await isPasswordLongEnough(user)
 
     expect(result.value[0]).toEqual({
@@ -151,6 +160,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "a".repeat(256),
     }
+
     const result = await isPasswordNotTooLong(user)
 
     expect(result.value[0]).toEqual({
@@ -166,6 +176,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       email: "valid_email@email.com",
       password: "valid_password_123",
     }
+
     const result = await isPasswordNotTooLong(user)
 
     expect(result.value).toEqual(user)
@@ -175,6 +186,7 @@ describe("SignUpUseCaseValidator test suite", () => {
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
+
     const result = await validator.validate({
       email: "invalid_email",
       username: "john_doe",
@@ -190,11 +202,13 @@ describe("SignUpUseCaseValidator test suite", () => {
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
+
     const user = {
       email: "valid_email@email.com",
       username: "john_doe",
       password: "123456",
     }
+
     const result = await validator.validate(user)
 
     expect(result.value).toEqual(user)
@@ -206,6 +220,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "john_doe",
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(user) },
     })
@@ -225,6 +240,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "john_doe",
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -240,6 +256,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "a",
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -259,6 +276,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_enough_username",
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -274,6 +292,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "huge_username".repeat(255),
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -293,6 +312,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_but_valid_username_123_abc",
       password: "123456",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -308,6 +328,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_but_valid_username_123_abc",
       password: "a",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -327,6 +348,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_but_valid_username_123_abc",
       password: "valid_password",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -342,6 +364,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_but_valid_username_123_abc",
       password: "invalid_password".repeat(255),
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
@@ -361,6 +384,7 @@ describe("SignUpUseCaseValidator test suite", () => {
       username: "long_but_valid_username_123_abc",
       password: "valid_password",
     }
+
     const validator = makeSignUpValidator({
       UserRepository: { findOne: _ => Promise.resolve(null) },
     })
