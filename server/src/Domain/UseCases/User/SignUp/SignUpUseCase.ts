@@ -1,5 +1,5 @@
 import User from "../../../Models/User"
-import IValidationError from "../../../Interfaces/IValidationError"
+import S from "../../../../Config/Sanctuary"
 
 interface IUserRepository {
   create: (data: User) => Promise<any>
@@ -7,7 +7,7 @@ interface IUserRepository {
 }
 
 interface IUserValidator {
-  validate: (data: User) => Promise<void>
+  validate: (data: User) => Promise<typeof S.Either>
 }
 
 interface IEncrypter {
@@ -27,8 +27,8 @@ const makeSignUpUseCase = ({
 }: IDependencies) => ({
   signUp: (data: User) =>
     UserValidator.validate(data)
-      .then(() => Encrypter.hash(data.password, 10))
-      .then(password => UserRepository.create({ ...data, password })),
+      .then(S.chain((): Promise<string> => Encrypter.hash(data.password, 10)))
+      .then((password: string) => UserRepository.create({ ...data, password })),
 })
 
 export default makeSignUpUseCase

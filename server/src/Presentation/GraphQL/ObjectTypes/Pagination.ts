@@ -7,7 +7,7 @@ export interface IPagination {
   has_next: boolean
 }
 
-@ObjectType("pagination")
+@ObjectType("Pagination")
 class Pagination {
   constructor(data: IPagination) {
     this.skip = data.skip

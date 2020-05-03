@@ -1,9 +1,9 @@
-import { createConnection } from "typeorm"
-import { getConnectionOptions } from "typeorm"
+import { createConnection, getConnectionOptions } from "typeorm"
+
 import { join } from "path"
 import { readdir } from "fs"
 import { promisify } from "util"
-import env from "../../../Config/env"
+import env from "../../../Config/Env"
 
 async function seed(): Promise<void> {
   const connectionOptions = await getConnectionOptions(env.NODE_ENV)
