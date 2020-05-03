@@ -1,9 +1,9 @@
 import { Field, ObjectType, ID } from "type-graphql"
 
-import ExtendedEntity from "./ExtendedEntity"
 import Role from "./Role"
+import ExtendedEntity from "../../../Infra/Database/Entities/ExtendedEntity"
 
-@ObjectType("user")
+@ObjectType("User")
 class User extends ExtendedEntity {
   @Field(() => ID)
   id!: number

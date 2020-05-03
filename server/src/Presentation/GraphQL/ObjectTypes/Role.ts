@@ -2,10 +2,9 @@ import { PrimaryGeneratedColumn, Column, ManyToMany, Entity } from "typeorm"
 import { Field, ObjectType, ID } from "type-graphql"
 
 import User from "./User"
-import ExtendedEntity from "./ExtendedEntity"
+import ExtendedEntity from "../../../Infra/Database/Entities/ExtendedEntity"
 
-@ObjectType("role")
-@Entity("roles")
+@ObjectType("Uole")
 class Role extends ExtendedEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()

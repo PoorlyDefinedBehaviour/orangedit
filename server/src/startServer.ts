@@ -1,17 +1,18 @@
 import "reflect-metadata"
 import load from "process-env-loader"
-load()
 import { Server } from "http"
 import express from "express"
 import cors from "cors"
 import { createConnection, getConnectionOptions } from "typeorm"
 import { ApolloServer } from "apollo-server-express"
 import { buildSchema } from "type-graphql"
-import env from "./Config/env"
-import rateLimiter from "./Support/RateLimiter"
 import session from "express-session"
+import env from "./Config/Env"
+import rateLimiter from "./Support/RateLimiter"
 import redis from "./Support/Redis"
 import loadResolvers from "./Utils/LoadResolvers"
+
+load()
 
 interface ServerStartResult {
   server: Server

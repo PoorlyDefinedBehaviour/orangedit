@@ -13,11 +13,11 @@ const Unique = <T>(
   property: UniqueProperty<T>,
   validationOptions?: ValidationOptions
 ) => {
-  return function (object: Object, propertyName: string) {
+  return function (object: Record<string, any>, propertyName: string) {
     registerDecorator({
       name: "unique",
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       constraints: [property],
       options: validationOptions,
       async: true,
