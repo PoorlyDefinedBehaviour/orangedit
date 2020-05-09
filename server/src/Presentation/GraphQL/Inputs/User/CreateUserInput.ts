@@ -1,15 +1,8 @@
 import { InputType, Field } from "type-graphql"
 
-import {
-  IsEmail,
-  MaxLength,
-  MinLength,
-  IsNotEmpty,
-  IsNumberString,
-  IsBoolean,
-} from "class-validator"
+import { IsEmail, MaxLength, MinLength, IsNotEmpty } from "class-validator"
 import Unique from "../Validators/Unique"
-import User from "../../ObjectTypes/User"
+import UserRepository from "../../../../Repositores/UserRepository"
 
 @InputType()
 class SignUpInput {
@@ -17,7 +10,7 @@ class SignUpInput {
   @IsEmail({}, { message: "Email must be a valid email" })
   @MaxLength(255, { message: "Email can't be longer than 255 characters" })
   @Unique(
-    { field: "email", repository: User },
+    { field: "email", repository: UserRepository },
     { message: "Email is already in use" }
   )
   @Field(() => String, { nullable: false })

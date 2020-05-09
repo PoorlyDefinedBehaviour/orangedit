@@ -4,6 +4,8 @@ import {
   ValidationOptions,
 } from "class-validator"
 
+import R from "ramda"
+
 interface UniqueProperty<T> {
   field: string
   repository: T
@@ -25,7 +27,10 @@ const Unique = <T>(
         validate(value: any, args: ValidationArguments) {
           const { field, repository } = args.constraints[0]
 
-          return repository.findOne({ [field]: value }).then(Boolean)
+          return repository
+            .findOne({ [field]: value })
+            .then(Boolean)
+            .then(R.not)
         },
       },
     })

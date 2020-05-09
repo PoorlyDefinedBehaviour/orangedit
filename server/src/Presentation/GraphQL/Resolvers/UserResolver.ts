@@ -1,28 +1,27 @@
 import { Resolver, Mutation, Arg, Query, createUnionType } from "type-graphql"
 
-import User from "../ObjectTypes/User"
+import UserObjectType from "../ObjectTypes/User"
 import SignUpInput from "../Inputs/User/CreateUserInput"
-import S from "../../../Config/Sanctuary"
 
 import SignUpUseCaseComposer from "../../../Composers/SignUpUseCaseComposer"
-import SignUpValidationError from "../ObjectTypes/SignUpValidationError"
-import IValidationError from "../../../Domain/Interfaces/IValidationError"
+import SignUpValidationErrorObjectType from "../ObjectTypes/SignUpValidationError"
 
 const SignUpUseCase = SignUpUseCaseComposer.compose()
 
 const SignUpResult = createUnionType({
   name: "SignUpResult",
-  types: () => [String, Number],
+  types: () => [SignUpValidationErrorObjectType, UserObjectType],
 })
 
-@Resolver(() => User)
-export default class UserResolver {
-  @Mutation(() => SignUpResult)
+@Resolver(() => UserObjectType)
+class UserResolver {
+  @Mutation(() => [SignUpResult])
   signUp(@Arg("data") data: SignUpInput) {
-    return SignUpUseCase.signUp(data).then(
-      S.either((validationError: IValidationError) => validationError)(
-        (user: User) => user
-      )
+    return SignUpUseCase.execute(data).then(result =>
+      result.matchWith({
+        Error: ({ value }) => value.map(SignUpValidationErrorObjectType.of),
+        Ok: ({ value }) => [UserObjectType.of(value)],
+      })
     )
   }
 
@@ -30,4 +29,7 @@ export default class UserResolver {
   foo() {
     return "hello world"
   }
+  yarn
 }
+
+export default UserResolver

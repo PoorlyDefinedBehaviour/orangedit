@@ -1,10 +1,8 @@
-interface IUser {
-  create: (data: object) => Promise<any>
+import User from "../Infra/Database/Entities/User"
+
+const UserRepository = {
+  create: (data: object) => User.create(data).save(),
+  findOne: (query: object) => User.findOne(query),
 }
 
-const makeUserRepository = (user: IUser) => ({
-  create: user.create,
-  findOne: user.findOne,
-})
-
-export default makeUserRepository
+export default UserRepository

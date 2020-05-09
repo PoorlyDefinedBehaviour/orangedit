@@ -12,6 +12,8 @@ class User extends ExtendedEntity {
   email!: string
 
   @Field(() => String)
+  username!: string
+
   password!: string
 
   @Field(() => Date)
@@ -22,6 +24,16 @@ class User extends ExtendedEntity {
 
   @Field(() => [Role])
   roles: Role[]
+
+  public static of(data: { id: number; email: string; username: string }) {
+    const user = new User()
+
+    user.id = data.id
+    user.email = data.email
+    user.username = data.username
+
+    return user
+  }
 }
 
 export default User
