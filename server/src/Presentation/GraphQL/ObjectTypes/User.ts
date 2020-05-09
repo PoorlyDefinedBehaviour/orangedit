@@ -16,12 +16,6 @@ class User extends ExtendedEntity {
 
   password!: string
 
-  @Field(() => Date)
-  created_at!: Date
-
-  @Field(() => Date)
-  updated_at!: Date
-
   @Field(() => [Role])
   roles: Role[]
 
