@@ -16,19 +16,10 @@ class User extends ExtendedEntity {
   id!: number
 
   @Column()
-  first_name!: string
-
-  @Column()
-  last_name!: string
+  username!: string
 
   @Column({ unique: true })
   email!: string
-
-  @Column()
-  phone!: string
-
-  @Column()
-  receive_notifications!: boolean
 
   @Column()
   password!: string

@@ -8,31 +8,32 @@ $ yarn
 $ npm i
 ```
 
-## With docker
-
 ### Running dev environment
 
+#### docker-compose
+
 ```terminal
-$ sudo docker-compose -f docker-compose-dev.yml
+$ yarn compose:dev
 ```
 
-## Without docker
-
-### Running dev enviroment
-
-- Make sure postgres is running on port 5432
-- Make sure redis is running on port 6379
+### docker
 
 ```terminal
-$ yarn start:dev
-// or
-$ npm run start:dev
-```
+$ sudo docker run --name orangedit_redis \
+       -p 6379:6379 \
+       -d redis
 
-### Testing
+$ sudo docker run --name orangedit_postgres \
+       -e POSTGRES_USER=postgres \
+       -e POSTGRES_PASSWORD=postgres \
+       -p 5432:5432 \
+       -d postgres:alpine
 
-```terminal
-$ yarn test
-// or
-$ npm test
+$ sudo docker exec -it orangedit_postgres psql -U postgres
+
+$ create database orangedit_dev
+
+$ yarn
+
+$ yarn dev
 ```

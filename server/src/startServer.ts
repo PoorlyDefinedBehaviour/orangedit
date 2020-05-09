@@ -1,18 +1,20 @@
 import "reflect-metadata"
 import load from "process-env-loader"
+load()
 import { Server } from "http"
 import express from "express"
 import cors from "cors"
 import { createConnection, getConnectionOptions } from "typeorm"
 import { ApolloServer } from "apollo-server-express"
 import { buildSchema } from "type-graphql"
-import session from "express-session"
+
 import env from "./Config/Env"
 import rateLimiter from "./Support/RateLimiter"
 import redis from "./Support/Redis"
+import session from "./Support/Session"
 import loadResolvers from "./Utils/LoadResolvers"
-
-load()
+import loadEntities from "./Utils/LoadEntities"
+import UserRepository from "./Repositores/UserRepository"
 
 interface ServerStartResult {
   server: Server
@@ -30,20 +32,23 @@ const startServer = async (): Promise<ServerStartResult> => {
 
   const connectionOptions = await getConnectionOptions(env.NODE_ENV)
 
-  const [schema] = await Promise.all([
-    buildSchema({
-      resolvers: loadResolvers(),
-    }),
-    createConnection({
-      ...connectionOptions,
-      name: "default",
-    }),
-  ])
+  await createConnection({
+    ...connectionOptions,
+    name: "default",
+    entities: loadEntities(),
+  })
+
+  const schema = await buildSchema({
+    resolvers: loadResolvers(),
+    emitSchemaFile: "./schema",
+  })
 
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({ req, res, redis }),
+    introspection: !isProductionEnv,
     debug: !isProductionEnv,
+    playground: !isProductionEnv,
   })
 
   apolloServer.applyMiddleware({ app, cors: false })

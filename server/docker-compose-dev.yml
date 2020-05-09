@@ -1,21 +1,21 @@
 version: "3"
 services:
   db:
-    image: mysql
+    image: postgres:alpine
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - ./volumes/mysql:/var/lib/orangedit/data
+      - ./volumes/postgres:/var/lib/postgres/data
     ports:
-      - "3306:3306"
+      - "5432:5432"
+    network_mode: host
 
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+    network_mode: host
 
   app:
     build: ./
@@ -26,4 +26,5 @@ services:
     depends_on:
       - db
       - redis
+    network_mode: host
     command: yarn dev

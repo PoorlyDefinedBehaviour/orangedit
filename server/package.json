@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^2.12.0",
+    "bcryptjs": "^2.4.3",
     "class-validator": "^0.12.2",
     "connect-redis": "^4.0.4",
     "cors": "^2.8.5",
@@ -23,6 +24,7 @@
     "folktale": "^2.3.2",
     "ioredis": "^4.16.3",
     "morgan": "^1.10.0",
+    "pg": "^8.0.3",
     "process-env-loader": "^1.1.0",
     "ramda": "^0.27.0",
     "reflect-metadata": "^0.1.13",
@@ -31,6 +33,7 @@
     "yup": "^0.28.5"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/connect-redis": "^0.0.13",
     "@types/express-rate-limit": "^5.0.0",
     "@types/express-session": "^1.17.0",
