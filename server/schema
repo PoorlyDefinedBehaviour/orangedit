@@ -3,13 +3,14 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
+type GenericError {
+  message: String!
+  code: String!
+}
 
 type Mutation {
   signUp(data: SignUpInput!): [SignUpResult!]!
+  signIn(data: SignInInput!): [SignInResult!]!
 }
 
 type Pagination {
@@ -22,6 +23,13 @@ type Pagination {
 type Query {
   foo: String!
 }
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+union SignInResult = GenericError | User
 
 input SignUpInput {
   email: String!
@@ -48,7 +56,5 @@ type User {
   id: ID!
   email: String!
   username: String!
-  created_at: DateTime!
-  updated_at: DateTime!
   roles: [Uole!]!
 }

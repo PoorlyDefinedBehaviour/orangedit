@@ -28,7 +28,7 @@ const makeSignUpUseCase = ({
   execute: (data: User) =>
     SignUpUseCaseValidator.validate(data).then(validationResult =>
       validationResult.matchWith({
-        Failure: errors => Result.Error(errors.merge()),
+        Failure: ({ value }) => Result.Error(value),
         Success: () =>
           Encrypter.hash(data.password, 10)
             .then(password => UserRepository.create({ ...data, password }))
