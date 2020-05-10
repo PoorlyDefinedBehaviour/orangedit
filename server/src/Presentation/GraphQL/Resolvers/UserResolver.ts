@@ -65,6 +65,7 @@ class UserResolver {
   @Mutation(() => Boolean)
   signOff(@Ctx() { req }) {
     return SignOffUseCase.execute(req.session.auth)
+      .then(() => req.session.destroy())
       .then(() => true)
       .catch(() => false)
   }

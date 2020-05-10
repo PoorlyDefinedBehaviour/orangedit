@@ -3,8 +3,12 @@ import Result from "folktale/result"
 import Maybe from "folktale/maybe"
 import MaybeT from "../../../../types/Maybe"
 
+type SignInUser = Omit<User, "username" | "roles">
+
 interface IUserRepository {
-  findOne: (query: object) => Promise<MaybeT<User & { id: number | string }>>
+  findOne: (
+    query: object
+  ) => Promise<MaybeT<SignInUser & { id: number | string }>>
 }
 
 interface IEncrypter {
@@ -12,7 +16,7 @@ interface IEncrypter {
 }
 
 interface IAuthenticator {
-  authenticate(user: User): Promise<string | number>
+  authenticate(user: SignInUser): Promise<string | number>
 }
 
 interface IDependencies {
@@ -26,7 +30,7 @@ const makeSignInUseCase = ({
   Encrypter,
   Authenticator,
 }: IDependencies) => ({
-  execute: (data: User) =>
+  execute: (data: SignInUser) =>
     UserRepository.findOne({ email: data.email })
       .then(user => Maybe.fromNullable(user!))
       .then(maybeUser => {

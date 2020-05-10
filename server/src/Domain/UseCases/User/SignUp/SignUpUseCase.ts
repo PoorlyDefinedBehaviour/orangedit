@@ -1,13 +1,15 @@
 import User from "../../../Models/User"
 import Result from "folktale/result"
 
+type SignUpUser = Omit<User, "roles">
+
 interface IUserRepository {
-  create: (data: User) => Promise<any>
+  create: (data: SignUpUser) => Promise<any>
   findOne: (query: object) => Promise<any>
 }
 
 interface SignUpUseCaseValidator {
-  validate: (data: User) => Promise<any>
+  validate: (data: SignUpUser) => Promise<any>
 }
 
 interface IEncrypter {
@@ -25,7 +27,7 @@ const makeSignUpUseCase = ({
   SignUpUseCaseValidator,
   Encrypter,
 }: IDependencies) => ({
-  execute: (data: User) =>
+  execute: (data: SignUpUser) =>
     SignUpUseCaseValidator.validate(data).then(validationResult =>
       validationResult.matchWith({
         Failure: ({ value }) => Result.Error(value),

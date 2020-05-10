@@ -1,5 +1,7 @@
+import User from "./User"
+
 type Role = {
-  user_id: string
+  user: User
   title: string
   description: string
 }
