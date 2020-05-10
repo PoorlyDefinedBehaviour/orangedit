@@ -10,11 +10,10 @@ import { buildSchema } from "type-graphql"
 
 import env from "./Config/Env"
 import rateLimiter from "./Support/RateLimiter"
-import redis from "./Support/Redis"
 import session from "./Support/Session"
+import redis from "./Support/Redis"
 import loadResolvers from "./Utils/LoadResolvers"
 import loadEntities from "./Utils/LoadEntities"
-import UserRepository from "./Repositores/UserRepository"
 
 interface ServerStartResult {
   server: Server

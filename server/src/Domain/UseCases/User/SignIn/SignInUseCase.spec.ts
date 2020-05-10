@@ -5,6 +5,7 @@ describe("SignInUseCase test suite", () => {
     const signInUseCase = makeSignInUseCase({
       Encrypter: { compare: (hash, value) => Promise.resolve(hash === value) },
       UserRepository: { findOne: _ => Promise.resolve(null) },
+      Authenticator: { authenticate: user => Promise.resolve(1) },
     })
 
     const result = await signInUseCase.execute({
@@ -21,10 +22,13 @@ describe("SignInUseCase test suite", () => {
       UserRepository: {
         findOne: _ =>
           Promise.resolve({
+            id: 1,
+            username: "johndoe",
             email: "johndoe@email.com",
             password: "password123",
           }),
       },
+      Authenticator: { authenticate: user => Promise.resolve(1) },
     })
 
     const result = await signInUseCase.execute({
@@ -35,17 +39,22 @@ describe("SignInUseCase test suite", () => {
     expect(result.value).toBe("Invalid credentials")
   })
 
-  test("returns Result.Ok if user is found and password matches", async () => {
+  test("returns Result.Ok(user, authResult) if user is found and password matches", async () => {
     const user = {
+      id: 1,
+      username: "johndoe",
       email: "johndoe@email.com",
       password: "password123",
     }
+
+    const authResult = 1
 
     const signInUseCase = makeSignInUseCase({
       Encrypter: { compare: (hash, value) => Promise.resolve(hash === value) },
       UserRepository: {
         findOne: query => Promise.resolve(user),
       },
+      Authenticator: { authenticate: user => Promise.resolve(authResult) },
     })
 
     const result = await signInUseCase.execute({
@@ -53,6 +62,6 @@ describe("SignInUseCase test suite", () => {
       password: "password123",
     })
 
-    expect(result.value).toEqual(user)
+    expect(result.value).toEqual([user, authResult])
   })
 })

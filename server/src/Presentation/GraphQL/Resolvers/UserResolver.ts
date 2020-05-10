@@ -1,4 +1,11 @@
-import { Resolver, Mutation, Arg, Query, createUnionType } from "type-graphql"
+import {
+  Resolver,
+  Mutation,
+  Arg,
+  Query,
+  createUnionType,
+  Ctx,
+} from "type-graphql"
 
 import UserObjectType from "../ObjectTypes/User"
 import SignUpInput from "../Inputs/User/CreateUserInput"
@@ -35,7 +42,7 @@ class UserResolver {
   }
 
   @Mutation(() => [SignInResult])
-  signIn(@Arg("data") data: SignInInput) {
+  signIn(@Arg("data") data: SignInInput, @Ctx() { req, redis }) {
     return SignInUseCase.execute(data).then(result =>
       result.matchWith({
         Error: ({ value }) => [
@@ -44,7 +51,11 @@ class UserResolver {
             code: "UNAUTHORIZED_ERROR",
           }),
         ],
-        Ok: ({ value }) => [UserObjectType.of(value)],
+        Ok: ({ value: [user, authResult] }) => {
+          req.session.token = authResult
+
+          return [UserObjectType.of(user)]
+        },
       })
     )
   }
