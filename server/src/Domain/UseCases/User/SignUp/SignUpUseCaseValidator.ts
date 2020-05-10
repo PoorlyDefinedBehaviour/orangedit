@@ -1,4 +1,4 @@
-import User from "../../../Models/User"
+import { SignUpUser } from "./SignUpUseCase"
 import { collect, Success, Failure } from "folktale/validation"
 import * as Yup from "yup"
 
@@ -10,7 +10,7 @@ interface IDependencies {
   UserRepository: IUserRepository
 }
 
-export const isEmailValid = (user: User) =>
+export const isEmailValid = (user: SignUpUser) =>
   Yup.string()
     .email()
     .isValid(user.email)
@@ -26,7 +26,7 @@ export const isEmailValid = (user: User) =>
           ])
     )
 
-export const isUsernameLongEnough = (user: User) =>
+export const isUsernameLongEnough = (user: SignUpUser) =>
   Yup.string()
     .min(5)
     .isValid(user.username)
@@ -42,7 +42,7 @@ export const isUsernameLongEnough = (user: User) =>
           ])
     )
 
-export const isUsernameNotTooLong = (user: User) =>
+export const isUsernameNotTooLong = (user: SignUpUser) =>
   Yup.string()
     .max(255)
     .isValid(user.username)
@@ -58,7 +58,7 @@ export const isUsernameNotTooLong = (user: User) =>
           ])
     )
 
-export const isPasswordLongEnough = (user: User) =>
+export const isPasswordLongEnough = (user: SignUpUser) =>
   Yup.string()
     .min(5)
     .isValid(user.password)
@@ -74,7 +74,7 @@ export const isPasswordLongEnough = (user: User) =>
           ])
     )
 
-export const isPasswordNotTooLong = (user: User) =>
+export const isPasswordNotTooLong = (user: SignUpUser) =>
   Yup.string()
     .max(255)
     .isValid(user.password)
@@ -95,7 +95,7 @@ export const isEmailInuse = ({
   user,
 }: {
   UserRepository: IUserRepository
-  user: User
+  user: SignUpUser
 }) =>
   UserRepository.findOne({ email: user.email })
     .then(Boolean)
@@ -112,7 +112,7 @@ export const isEmailInuse = ({
     )
 
 const makeSignUpValidator = ({ UserRepository }: IDependencies) => ({
-  validate: (user: User) =>
+  validate: (user: SignUpUser) =>
     Promise.all([
       isEmailValid(user),
       isEmailInuse({ UserRepository, user }),

@@ -1,7 +1,7 @@
 import User from "../../../Models/User"
 import Result from "folktale/result"
 
-type SignUpUser = Omit<User, "roles">
+export type SignUpUser = Omit<User, "roles">
 
 interface IUserRepository {
   create: (data: SignUpUser) => Promise<any>
