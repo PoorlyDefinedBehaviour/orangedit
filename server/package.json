@@ -10,7 +10,7 @@
     "start": "node build/main",
     "dev": "node_modules/.bin/ts-node-dev src/main",
     "test": "NODE_ENV=test node_modules/.bin/jest --forceExit --detectOpenHandles --testTimeout=10000",
-    "cov": "node_modules/.bin/jest --coverage"
+    "test:cov": "node_modules/.bin/jest --coverage"
   },
   "dependencies": {
     "apollo-server-express": "^2.12.0",

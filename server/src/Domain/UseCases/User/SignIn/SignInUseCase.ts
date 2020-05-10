@@ -4,7 +4,7 @@ import Maybe from "folktale/maybe"
 import MaybeT from "../../../../types/Maybe"
 
 interface IUserRepository {
-  findOne: (query: object) => Promise<MaybeT<User>>
+  findOne: (query: object) => Promise<MaybeT<User & { id: number | string }>>
 }
 
 interface IEncrypter {
@@ -26,7 +26,7 @@ const makeSignInUseCase = ({
   Encrypter,
   Authenticator,
 }: IDependencies) => ({
-  execute: (data: Omit<User, "id" | "username">) =>
+  execute: (data: User) =>
     UserRepository.findOne({ email: data.email })
       .then(user => Maybe.fromNullable(user!))
       .then(maybeUser => {

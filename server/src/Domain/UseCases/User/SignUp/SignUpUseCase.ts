@@ -7,7 +7,7 @@ interface IUserRepository {
 }
 
 interface SignUpUseCaseValidator {
-  validate: (data: Omit<User, "id">) => Promise<any>
+  validate: (data: User) => Promise<any>
 }
 
 interface IEncrypter {
@@ -25,15 +25,13 @@ const makeSignUpUseCase = ({
   SignUpUseCaseValidator,
   Encrypter,
 }: IDependencies) => ({
-  execute: (data: Omit<User, "id">) =>
+  execute: (data: User) =>
     SignUpUseCaseValidator.validate(data).then(validationResult =>
       validationResult.matchWith({
         Failure: ({ value }) => Result.Error(value),
         Success: () =>
           Encrypter.hash(data.password, 10)
-            .then(password =>
-              UserRepository.create({ ...data, password } as User)
-            )
+            .then(password => UserRepository.create({ ...data, password }))
             .then(Result.Ok),
       })
     ),
