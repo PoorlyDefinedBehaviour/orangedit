@@ -12,12 +12,14 @@ import SignUpInput from "../Inputs/User/CreateUserInput"
 
 import SignUpUseCaseComposer from "../../../Composers/SignUpUseCaseComposer"
 import SignInUseCaseComposer from "../../../Composers/SignInUseCaseComposer"
+import SignOffUseCaseComposer from "../../../Composers/SignOffUseCaseComposer"
 import SignUpValidationErrorObjectType from "../ObjectTypes/SignUpValidationError"
 import GenericErrorObjectType from "../ObjectTypes/GenericError"
 import SignInInput from "../Inputs/User/SignInInput"
 
 const SignUpUseCase = SignUpUseCaseComposer.compose()
 const SignInUseCase = SignInUseCaseComposer.compose()
+const SignOffUseCase = SignOffUseCaseComposer.compose()
 
 const SignUpResult = createUnionType({
   name: "SignUpResult",
@@ -52,12 +54,19 @@ class UserResolver {
           }),
         ],
         Ok: ({ value: [user, authResult] }) => {
-          req.session.token = authResult
+          req.session.auth = authResult
 
           return [UserObjectType.of(user)]
         },
       })
     )
+  }
+
+  @Mutation(() => Boolean)
+  signOff(@Ctx() { req }) {
+    return SignOffUseCase.execute(req.session.auth)
+      .then(() => true)
+      .catch(() => false)
   }
 
   @Query(() => String)

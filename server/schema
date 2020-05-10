@@ -11,6 +11,7 @@ type GenericError {
 type Mutation {
   signUp(data: SignUpInput!): [SignUpResult!]!
   signIn(data: SignInInput!): [SignInResult!]!
+  signOff: Boolean!
 }
 
 type Pagination {

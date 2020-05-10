@@ -1,7 +1,6 @@
 import User from "../../../Models/User"
 import Result from "folktale/result"
 import Maybe from "folktale/maybe"
-import R from "ramda"
 import MaybeT from "../../../../types/Maybe"
 
 interface IUserRepository {
@@ -15,6 +14,7 @@ interface IEncrypter {
 interface IAuthenticator {
   authenticate(user: User): Promise<string | number>
 }
+
 interface IDependencies {
   UserRepository: IUserRepository
   Encrypter: IEncrypter

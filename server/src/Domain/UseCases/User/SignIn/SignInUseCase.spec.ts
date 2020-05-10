@@ -64,4 +64,29 @@ describe("SignInUseCase test suite", () => {
 
     expect(result.value).toEqual([user, authResult])
   })
+
+  test("Uses authenticator to authenticate user, it could be jwt/session or whatever", async () => {
+    const user = {
+      id: 1,
+      username: "johndoe",
+      email: "johndoe@email.com",
+      password: "password123",
+    }
+
+    const result1 = await makeSignInUseCase({
+      Encrypter: { compare: (hash, value) => Promise.resolve(hash === value) },
+      UserRepository: { findOne: _ => Promise.resolve(user) },
+      Authenticator: { authenticate: user => Promise.resolve(1) },
+    }).execute(user)
+
+    const result2 = await makeSignInUseCase({
+      Encrypter: { compare: (hash, value) => Promise.resolve(hash === value) },
+      UserRepository: { findOne: _ => Promise.resolve(user) },
+      Authenticator: { authenticate: user => Promise.resolve("hello world") },
+    }).execute(user)
+
+    expect(result1.value[1]).toBe(1)
+
+    expect(result2.value[1]).toBe("hello world")
+  })
 })
