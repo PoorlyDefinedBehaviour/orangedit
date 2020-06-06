@@ -13,7 +13,7 @@
     "cov": "node_modules/.bin/jest --coverage"
   },
   "dependencies": {
-    "apollo-server-express": "^2.12.0",
+    "apollo-server-express": "^2.14.2",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.12.2",
     "connect-redis": "^4.0.4",
